@@ -10,7 +10,7 @@
                         </div>
                         <div style="display: flex; gap: 0.75rem;">
                             <input type="text" id="masterSearch" placeholder="Search product..." class="form-input" style="width: 220px;" oninput="filterMasterTable(this.value)">
-                            <button onclick="openAddProductModal()" class="btn-action" style="background: var(--primary-blue); color: white; border: none; padding: 0.55rem 1rem; border-radius: 8px; cursor: pointer; font-weight: 600;"><i class="fa-solid fa-plus"></i> Add Product</button>
+                            <button onclick="openAddProductModal()" class="btn-action" style="background: #3B82F6; color: white; border: none; padding: 0.55rem 1rem; border-radius: 8px; cursor: pointer; font-weight: 600;"><i class="fa-solid fa-plus"></i> Add Product</button>
                             <a href="/api/products/export" class="btn-action" style="background: #10B981; color: white; text-decoration: none; display: inline-flex; width: 140px; padding: 0.55rem; border-radius: 8px; justify-content: center; align-items: center;"><i class="fa-solid fa-file-excel"></i> Export CSV</a>
                             <select class="form-select" style="width: 130px;" onchange="filterCategory(this.value)">
                                 <option value="all">Semua Kategori</option>
