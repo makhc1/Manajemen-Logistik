@@ -386,7 +386,6 @@
     
     async function handleAddProductSubmit(e) {
         e.preventDefault();
-        const sku = document.getElementById('addProdSku').value;
         const name = document.getElementById('addProdName').value;
         const category = document.getElementById('addProdCategory').value;
         const stock = parseInt(document.getElementById('addProdStock').value);
@@ -397,7 +396,7 @@
             const res = await fetch('/api/products', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-                body: JSON.stringify({ sku, name, category, stock, location, brand })
+                body: JSON.stringify({ name, category, stock, location, brand })
             });
             const data = await res.json();
             if (data.success) {

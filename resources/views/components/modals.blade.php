@@ -24,10 +24,7 @@
         <h3 style="font-size: 1.1rem; font-weight: 800; color: #0F172A; margin-bottom: 1rem;">Add New Product</h3>
         <form id="addProductForm" onsubmit="handleAddProductSubmit(event)">
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
-                <div>
-                    <label style="display: block; font-size: 0.8rem; font-weight: 700; color: #64748B; margin-bottom: 0.25rem;">SKU</label>
-                    <input type="text" id="addProdSku" class="form-input" required>
-                </div>
+
                 <div>
                     <label style="display: block; font-size: 0.8rem; font-weight: 700; color: #64748B; margin-bottom: 0.25rem;">Product Name</label>
                     <input type="text" id="addProdName" class="form-input" required>

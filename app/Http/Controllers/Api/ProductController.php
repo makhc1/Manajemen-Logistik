@@ -15,10 +15,9 @@ class ProductController extends Controller
     }
 
 
-    public function store(Request )
+    public function store(Request $request)
     {
-         = ->validate([
-            'sku' => 'required|string|unique:products,sku',
+        $validated = $request->validate([
             'name' => 'required|string',
             'category' => 'required|string',
             'stock' => 'required|integer|min:0',
@@ -26,19 +25,24 @@ class ProductController extends Controller
             'brand' => 'nullable|string'
         ]);
 
-         = Product::create([
-            'sku' => ['sku'],
-            'name' => ['name'],
-            'category' => ['category'],
-            'stock' => ['stock'],
-            'location' => ['location'],
-            'brand' => ['brand'],
+        $sku = 'BRG-' . str_pad(rand(1, 99999), 5, '0', STR_PAD_LEFT);
+        while (Product::where('sku', $sku)->exists()) {
+            $sku = 'BRG-' . str_pad(rand(1, 99999), 5, '0', STR_PAD_LEFT);
+        }
+
+        $product = Product::create([
+            'sku' => $sku,
+            'name' => $validated['name'],
+            'category' => $validated['category'],
+            'stock' => $validated['stock'],
+            'location' => $validated['location'],
+            'brand' => $validated['brand'],
             'origin' => 'Local',
             'dimension' => 'Standard',
             'spec' => 'Standard'
         ]);
 
-        return response()->json(['success' => true, 'product' => ]);
+        return response()->json(['success' => true, 'product' => $product]);
     }
 
     public function exportCsv()
