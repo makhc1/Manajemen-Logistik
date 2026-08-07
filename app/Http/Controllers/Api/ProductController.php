@@ -14,6 +14,33 @@ class ProductController extends Controller
         return response()->json(Product::all());
     }
 
+
+    public function store(Request )
+    {
+         = ->validate([
+            'sku' => 'required|string|unique:products,sku',
+            'name' => 'required|string',
+            'category' => 'required|string',
+            'stock' => 'required|integer|min:0',
+            'location' => 'required|string',
+            'brand' => 'nullable|string'
+        ]);
+
+         = Product::create([
+            'sku' => ['sku'],
+            'name' => ['name'],
+            'category' => ['category'],
+            'stock' => ['stock'],
+            'location' => ['location'],
+            'brand' => ['brand'],
+            'origin' => 'Local',
+            'dimension' => 'Standard',
+            'spec' => 'Standard'
+        ]);
+
+        return response()->json(['success' => true, 'product' => ]);
+    }
+
     public function exportCsv()
     {
         $products = Product::all();

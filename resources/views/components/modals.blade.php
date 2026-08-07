@@ -17,3 +17,46 @@
     <i class="fa-solid fa-circle-check" style="color: #10B981; font-size: 1.1rem;"></i>
     <span id="toastMessage">Sistem WMS Siap Digunakan</span>
 </div>
+
+<!-- Add Product Modal -->
+<div id="addProductModal" class="modal-overlay">
+    <div class="modal-card" style="width: 500px; max-width: 90vw;">
+        <h3 style="font-size: 1.1rem; font-weight: 800; color: #0F172A; margin-bottom: 1rem;">Add New Product</h3>
+        <form id="addProductForm" onsubmit="handleAddProductSubmit(event)">
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+                <div>
+                    <label style="display: block; font-size: 0.8rem; font-weight: 700; color: #64748B; margin-bottom: 0.25rem;">SKU</label>
+                    <input type="text" id="addProdSku" class="form-input" required>
+                </div>
+                <div>
+                    <label style="display: block; font-size: 0.8rem; font-weight: 700; color: #64748B; margin-bottom: 0.25rem;">Product Name</label>
+                    <input type="text" id="addProdName" class="form-input" required>
+                </div>
+                <div>
+                    <label style="display: block; font-size: 0.8rem; font-weight: 700; color: #64748B; margin-bottom: 0.25rem;">Category</label>
+                    <select id="addProdCategory" class="form-select" required>
+                        <option value="Elektronik">Elektronik</option>
+                        <option value="Aksesori">Aksesori</option>
+                        <option value="Hardware">Hardware</option>
+                    </select>
+                </div>
+                <div>
+                    <label style="display: block; font-size: 0.8rem; font-weight: 700; color: #64748B; margin-bottom: 0.25rem;">Initial Stock</label>
+                    <input type="number" id="addProdStock" class="form-input" min="0" value="0" required>
+                </div>
+                <div>
+                    <label style="display: block; font-size: 0.8rem; font-weight: 700; color: #64748B; margin-bottom: 0.25rem;">Location</label>
+                    <input type="text" id="addProdLocation" class="form-input" required>
+                </div>
+                <div>
+                    <label style="display: block; font-size: 0.8rem; font-weight: 700; color: #64748B; margin-bottom: 0.25rem;">Brand / Supplier</label>
+                    <input type="text" id="addProdBrand" class="form-input">
+                </div>
+            </div>
+            <div style="display: flex; gap: 0.75rem;">
+                <button type="submit" class="btn-action btn-primary" style="flex: 1;"><i class="fa-solid fa-save"></i> Save Product</button>
+                <button type="button" class="btn-action" style="background: #E2E8F0; color: #475569; flex: 1;" onclick="closeAddProductModal()">Cancel</button>
+            </div>
+        </form>
+    </div>
+</div>

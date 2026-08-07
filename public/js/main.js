@@ -394,3 +394,39 @@
             toast.classList.remove('show');
         }, 3200);
     }
+    // Add Product UI
+    function openAddProductModal() {
+        document.getElementById('addProductModal').classList.add('active');
+        document.getElementById('addProductForm').reset();
+    }
+    
+    function closeAddProductModal() {
+        document.getElementById('addProductModal').classList.remove('active');
+    }
+    
+    async function handleAddProductSubmit(e) {
+        e.preventDefault();
+        const sku = document.getElementById('addProdSku').value;
+        const name = document.getElementById('addProdName').value;
+        const category = document.getElementById('addProdCategory').value;
+        const stock = parseInt(document.getElementById('addProdStock').value);
+        const location = document.getElementById('addProdLocation').value;
+        const brand = document.getElementById('addProdBrand').value;
+
+        try {
+            const res = await fetch('/api/products', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+                body: JSON.stringify({ sku, name, category, stock, location, brand })
+            });
+            const data = await res.json();
+            if (data.success) {
+                fetchProducts();
+                closeAddProductModal();
+                showToast('Produk baru berhasil ditambahkan!');
+            }
+        } catch (e) {
+            showToast('Gagal menambahkan produk!');
+        }
+    }
+    
