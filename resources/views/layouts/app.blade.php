@@ -20,7 +20,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <!-- Custom Styles -->
-    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/style.css') }}?v={{ time() }}">
 </head>
 <body>
 
@@ -41,6 +41,6 @@
 @include('components.modals')
 
 <!-- Custom Scripts -->
-<script src="{{ asset('js/main.js') }}"></script>
+<script src="{{ asset('js/main.js') }}?v={{ time() }}"></script>
 </body>
 </html>
