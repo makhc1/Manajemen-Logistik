@@ -1,18 +1,10 @@
-// Initial State & Seed Data matching Mockup
-    
-
-    
-        return JSON.parse(stored);
-    }
-
-    
     let cachedProducts = [];
 
     async function fetchProducts() {
         try {
             const res = await fetch('/api/products');
             cachedProducts = await res.json();
-            fetchProducts();
+            renderAll();
         } catch (e) {
             console.error('Failed to fetch products', e);
         }
@@ -21,11 +13,6 @@
     function getProducts() {
         return cachedProducts;
     }
-
-    function saveProducts(products) {
-        // Not used directly for bulk save anymore, backend handles logic.
-    }
-
 
     // Initialize Chart & Barcodes
     let flowChartInstance = null;
@@ -39,8 +26,9 @@
     });
 
     function initChart() {
-        const ctx = document.getElementById('weeklyFlowChart').getContext('2d');
-        flowChartInstance = new Chart(ctx, {
+        const ctx = document.getElementById('weeklyFlowChart');
+        if (!ctx) return;
+        flowChartInstance = new Chart(ctx.getContext('2d'), {
             type: 'bar',
             data: {
                 labels: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
@@ -83,38 +71,45 @@
         const totalStock = products.reduce((sum, item) => sum + parseInt(item.stock), 0);
         const lowStockItems = products.filter(item => parseInt(item.stock) <= 50);
 
-        document.getElementById('statTotalStock').innerText = totalStock.toLocaleString();
-        document.getElementById('statLowStockCount').innerHTML = `${lowStockItems.length} <span style="font-size: 0.85rem; font-weight: 600;">Items</span>`;
+        const statTotalStock = document.getElementById('statTotalStock');
+        if (statTotalStock) statTotalStock.innerText = totalStock.toLocaleString();
+        
+        const statLowStockCount = document.getElementById('statLowStockCount');
+        if (statLowStockCount) statLowStockCount.innerHTML = `${lowStockItems.length} <span style="font-size: 0.85rem; font-weight: 600;">Items</span>`;
 
         // 2. Render Low Stock Table
         const lowStockBody = document.getElementById('lowStockTableBody');
-        lowStockBody.innerHTML = lowStockItems.map(item => `
-            <tr>
-                <td style="font-weight: 700;">${item.name}</td>
-                <td style="color: #64748B;">${item.sku}</td>
-                <td><span style="background: #F1F5F9; padding: 2px 8px; border-radius: 6px; font-weight: 600; font-size: 0.75rem;">${item.category}</span></td>
-                <td><span style="color: #C2410C; font-weight: 800;">${item.stock}</span></td>
-                <td>${item.location}</td>
-                <td><button class="btn-reorder" onclick="triggerReorder('${item.sku}')">Reorder</button></td>
-            </tr>
-        `).join('');
+        if (lowStockBody) {
+            lowStockBody.innerHTML = lowStockItems.map(item => `
+                <tr>
+                    <td style="font-weight: 700;">${item.name}</td>
+                    <td style="color: #64748B;">${item.sku}</td>
+                    <td><span style="background: #F1F5F9; padding: 2px 8px; border-radius: 6px; font-weight: 600; font-size: 0.75rem;">${item.category}</span></td>
+                    <td><span style="color: #C2410C; font-weight: 800;">${item.stock}</span></td>
+                    <td>${item.location}</td>
+                    <td><button class="btn-reorder" onclick="triggerReorder('${item.sku}')">Reorder</button></td>
+                </tr>
+            `).join('');
+        }
 
         // 3. Render Master Table
         const masterBody = document.getElementById('masterTableBody');
-        masterBody.innerHTML = products.map((item, idx) => `
-            <tr onclick="selectProductDetail('${item.sku}')" style="cursor: pointer;">
-                <td><input type="checkbox" ${idx === 0 ? 'checked' : ''}></td>
-                <td style="font-weight: 700; display: flex; align-items: center; gap: 0.5rem;">
-                    <i class="fa-solid fa-box" style="color: var(--primary-orange);"></i>
-                    ${item.name}
-                </td>
-                <td style="color: #64748B; font-weight: 600;">${item.sku}</td>
-                <td><span style="background: #F1F5F9; padding: 2px 8px; border-radius: 6px; font-weight: 600; font-size: 0.75rem;">${item.category}</span></td>
-                <td style="font-weight: 800;">${item.stock}</td>
-                <td><span style="color: var(--primary-orange); font-weight: 700;">${item.location}</span></td>
-                <td><button class="btn-reorder" onclick="event.stopPropagation(); triggerReorder('${item.sku}')">Reorder</button></td>
-            </tr>
-        `).join('');
+        if (masterBody) {
+            masterBody.innerHTML = products.map((item, idx) => `
+                <tr onclick="selectProductDetail('${item.sku}')" style="cursor: pointer;">
+                    <td><input type="checkbox" ${idx === 0 ? 'checked' : ''}></td>
+                    <td style="font-weight: 700; display: flex; align-items: center; gap: 0.5rem;">
+                        <i class="fa-solid fa-box" style="color: var(--primary-orange);"></i>
+                        ${item.name}
+                    </td>
+                    <td style="color: #64748B; font-weight: 600;">${item.sku}</td>
+                    <td><span style="background: #F1F5F9; padding: 2px 8px; border-radius: 6px; font-weight: 600; font-size: 0.75rem;">${item.category}</span></td>
+                    <td style="font-weight: 800;">${item.stock}</td>
+                    <td><span style="color: var(--primary-orange); font-weight: 700;">${item.location}</span></td>
+                    <td><button class="btn-reorder" onclick="event.stopPropagation(); triggerReorder('${item.sku}')">Reorder</button></td>
+                </tr>
+            `).join('');
+        }
 
         // 4. Select default preview
         if (products.length > 0) {
@@ -127,18 +122,21 @@
         const p = products.find(item => item.sku === sku);
         if (!p) return;
 
-        document.getElementById('detailName').innerText = p.name;
-        document.getElementById('detailSku').innerText = `SKU: ${p.sku}`;
-        document.getElementById('detailBrand').innerText = p.brand || 'Sanco Hsciera';
-        document.getElementById('detailBrandTitle').innerText = p.brand || 'Sanco Hsciera';
-        document.getElementById('detailDimension').innerText = p.dimension || '1000ml';
-        document.getElementById('detailSpec').innerText = p.spec || '100 of 02 mm';
-        document.getElementById('detailOrigin').innerText = p.origin || 'Indonesia';
-        document.getElementById('detailLocation').innerText = p.location;
+        const detailName = document.getElementById('detailName');
+        if (detailName) {
+            detailName.innerText = p.name;
+            document.getElementById('detailSku').innerText = `SKU: ${p.sku}`;
+            document.getElementById('detailBrand').innerText = p.brand || 'Sanco Hsciera';
+            document.getElementById('detailBrandTitle').innerText = p.brand || 'Sanco Hsciera';
+            document.getElementById('detailDimension').innerText = p.dimension || '1000ml';
+            document.getElementById('detailSpec').innerText = p.spec || '100 of 02 mm';
+            document.getElementById('detailOrigin').innerText = p.origin || 'Indonesia';
+            document.getElementById('detailLocation').innerText = p.location;
 
-        try {
-            JsBarcode("#detailBarcodeSvg", p.sku, { format: "CODE128", width: 1.5, height: 40, displayValue: true });
-        } catch (e) {}
+            try {
+                JsBarcode("#detailBarcodeSvg", p.sku, { format: "CODE128", width: 1.5, height: 40, displayValue: true });
+            } catch (e) {}
+        }
     }
 
     function updateLiveBarcode(val) {
@@ -188,7 +186,6 @@
     }
 
     // Inbound Form Submission & Barcode Modal
-    
     async function handleInboundSubmit(e) {
         e.preventDefault();
         const sku = document.getElementById('inboundSku').value;
@@ -210,28 +207,13 @@
             if (data.success) {
                 fetchProducts();
                 document.getElementById('modalProdName').innerText = name;
-                document.getElementById('modalProdLoc').innerText = ${location} • ;
+                document.getElementById('modalProdLoc').innerText = `${location} • ${origin}`;
                 try { JsBarcode('#modalBarcodeSvg', sku, { format: 'CODE128', width: 2, height: 60, displayValue: true }); } catch(err) {}
                 document.getElementById('barcodePrintModal').classList.add('active');
             }
         } catch (e) {
             showToast('Gagal menyimpan data ke server!');
         }
-    }
- else {
-            products.push({ sku, name, category, stock: qty, location, origin, brand: 'PT Berdikari Jaya', dimension: '1 Unit', spec: 'Standard' });
-        }
-
-        saveProducts(products);
-
-        // Show Barcode Modal
-        document.getElementById('modalProdName').innerText = name;
-        document.getElementById('modalProdLoc').innerText = `${location} • ${origin}`;
-        try {
-            JsBarcode("#modalBarcodeSvg", sku, { format: "CODE128", width: 2, height: 60, displayValue: true });
-        } catch(err) {}
-
-        document.getElementById('barcodePrintModal').classList.add('active');
     }
 
     function closeBarcodeModal() {
@@ -295,9 +277,10 @@
         if (html === '') {
             html = `<tr><td colspan="3" style="text-align: center; color: #94A3B8;">Belum ada item dipilih</td></tr>`;
         }
-
-        tableBody.innerHTML = html;
-        document.getElementById('pickingSelectedCount').innerText = `${selectedCount} Selected Items`;
+        
+        if (tableBody) tableBody.innerHTML = html;
+        const countSpan = document.getElementById('pickingSelectedCount');
+        if (countSpan) countSpan.innerText = `${selectedCount} Selected Items`;
     }
 
     function updateSuratJalanInfo() {
@@ -310,7 +293,6 @@
         document.getElementById('sjDateDisplay').innerText = date;
     }
 
-    
     async function processOutboundStockUpdate() {
         const checkboxes = document.querySelectorAll('.pick-item:checked');
         const items = [];
@@ -342,10 +324,6 @@
         } catch (e) {
             showToast('Gagal memproses outbound!');
         }
-    }
-);
-        saveProducts(products);
-        showToast('Stok berkurang otomatis! Surat Jalan SJ-30241028-001 Terupdate!');
     }
 
     function downloadSuratJalanPDF() {
@@ -388,12 +366,14 @@
 
     function showToast(message) {
         const toast = document.getElementById('toast');
+        if (!toast) return;
         document.getElementById('toastMessage').innerText = message;
         toast.classList.add('show');
         setTimeout(() => {
             toast.classList.remove('show');
         }, 3200);
     }
+
     // Add Product UI
     function openAddProductModal() {
         document.getElementById('addProductModal').classList.add('active');
@@ -429,4 +409,3 @@
             showToast('Gagal menambahkan produk!');
         }
     }
-    
