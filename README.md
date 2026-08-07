@@ -11,6 +11,7 @@ A modern, highly functional, and aesthetically pleasing Warehouse Management Sys
 *   **Outbound & Picking List**: Create shipment orders ("Surat Jalan") by selecting items from a picking list. Automatically deducts stock from the inventory database.
 *   **Export to CSV**: Easily export the entire master inventory list to a CSV (Excel) format with a single click.
 *   **Print-Ready Forms**: Optimized for physical printing (`@media print` CSS rules) ensuring that Barcode Labels and Surat Jalan can be printed directly from the browser cleanly without extra UI elements.
+*   **Authentication**: Secure user login and registration system with session management.
 *   **Multi-Page Application Architecture**: Cleanly separated Blade components and views, tied together with Laravel Controllers and dynamic API routes.
 
 ## Technology Stack
@@ -28,7 +29,7 @@ A modern, highly functional, and aesthetically pleasing Warehouse Management Sys
 
 1.  **Clone the repository**:
     ```bash
-    git clone https://github.com/yourusername/MANAJEMENLOGISTIK120.git
+    git clone https://github.com/makhc1/Manajemen-Logistik.git
     cd MANAJEMENLOGISTIK120
     ```
 
@@ -72,6 +73,7 @@ A modern, highly functional, and aesthetically pleasing Warehouse Management Sys
 ## Project Structure Highlights
 
 *   `app/Http/Controllers/PageController.php`: Handles the multi-page routing and Blade views.
+*   `app/Http/Controllers/AuthController.php`: Handles user login, registration, and logout logic.
 *   `app/Http/Controllers/Api/*`: Handles AJAX requests for fetching, updating (Inbound), and deducting (Outbound) stock.
 *   `resources/views/pages/*`: Extracted individual page views.
 *   `resources/views/components/*`: Reusable Blade components (Sidebar, Header, Modals).
