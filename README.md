@@ -2,7 +2,7 @@
 
 A modern, highly functional, and aesthetically pleasing Warehouse Management System (WMS) built with Laravel and vanilla HTML/CSS/JS. This application is designed to streamline inventory management, stock tracking, and shipment processing with an interactive and user-friendly interface.
 
-## 🚀 Features
+## Features
 
 *   **Dynamic Dashboard**: Real-time overview of total stock, daily inbound/outbound metrics, and low-stock alerts. Includes a weekly flow chart using Chart.js.
 *   **Inventory Master Data**: Comprehensive list of products with quick views of SKU, category, stock quantities, and physical warehouse locations.
@@ -13,7 +13,7 @@ A modern, highly functional, and aesthetically pleasing Warehouse Management Sys
 *   **Print-Ready Forms**: Optimized for physical printing (`@media print` CSS rules) ensuring that Barcode Labels and Surat Jalan can be printed directly from the browser cleanly without extra UI elements.
 *   **Multi-Page Application Architecture**: Cleanly separated Blade components and views, tied together with Laravel Controllers and dynamic API routes.
 
-## 🛠️ Technology Stack
+## Technology Stack
 
 *   **Backend**: Laravel 11.x (PHP 8+)
 *   **Database**: MySQL
@@ -24,7 +24,7 @@ A modern, highly functional, and aesthetically pleasing Warehouse Management Sys
     *   [FontAwesome](https://fontawesome.com/) for scalable vector icons.
     *   [Google Fonts](https://fonts.google.com/specimen/Plus+Jakarta+Sans) (Plus Jakarta Sans) for modern typography.
 
-## 📦 Setup & Installation
+## Setup & Installation
 
 1.  **Clone the repository**:
     ```bash
@@ -69,7 +69,7 @@ A modern, highly functional, and aesthetically pleasing Warehouse Management Sys
     ```
     The application will be accessible at `http://localhost:8000`.
 
-## 📂 Project Structure highlights
+## Project Structure Highlights
 
 *   `app/Http/Controllers/PageController.php`: Handles the multi-page routing and Blade views.
 *   `app/Http/Controllers/Api/*`: Handles AJAX requests for fetching, updating (Inbound), and deducting (Outbound) stock.
@@ -78,5 +78,5 @@ A modern, highly functional, and aesthetically pleasing Warehouse Management Sys
 *   `public/js/main.js`: Main frontend logic and API integration.
 *   `public/css/style.css`: Clean, vanilla CSS avoiding overly complex utility classes.
 
-## 📜 License
+## License
 This project is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
