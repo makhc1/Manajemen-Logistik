@@ -1,19 +1,19 @@
-# WMS - Warehouse Management System (Berdikari Jaya)
+# Warehouse Management System (Berdikari Jaya)
 
 A modern, responsive, and robust Warehouse Management System built with Laravel, JavaScript, and Chart.js. This system handles inventory master data, inbound and outbound tracking, user role management, and provides a real-time analytics dashboard.
 
 ![Screenshot](https://images.unsplash.com/photo-1586528116311-ad866f272a51?w=1200&h=400&fit=crop)
 
-## ✨ Core Features
+## Core Features
 
-- 📊 **Real-time Dashboard**: Interactive Bar and Doughnut charts showing daily item flows and category distributions.
-- 📦 **Master Inventory Management**: Full CRUD operations for managing product catalogs.
-- 🚚 **Inbound/Outbound Tracking**: Log incoming shipments, track suppliers, and manage outbound dispatch records.
-- 👥 **User Role Management**: Manage staff, supervisors, and managers with custom profile avatars via external image links.
-- 📱 **Fully Responsive Layout**: Built with a custom CSS Grid that scales beautifully across desktops, tablets, and smartphones.
-- 🖨️ **Barcode Generation & Printing**: Instantly generate CODE128 barcodes for SKUs and print them seamlessly.
+- **Real-time Dashboard**: Interactive Bar and Doughnut charts showing daily item flows and category distributions.
+- **Master Inventory Management**: Full CRUD operations for managing product catalogs.
+- **Inbound/Outbound Tracking**: Log incoming shipments, track suppliers, and manage outbound dispatch records.
+- **User Role Management**: Manage staff, supervisors, and managers with custom profile avatars via external image links.
+- **Fully Responsive Layout**: Built with a custom CSS Grid that scales seamlessly across desktops, tablets, and smartphones.
+- **Barcode Generation & Printing**: Instantly generate CODE128 barcodes for SKUs and print them directly from the system.
 
-## 🚀 Technology Stack
+## Technology Stack
 
 - **Backend Framework**: Laravel 11 (PHP)
 - **Database**: MySQL
@@ -26,9 +26,9 @@ A modern, responsive, and robust Warehouse Management System built with Laravel,
 
 ---
 
-## 🗄️ Database Architecture (ERD)
+## Database Architecture (ERD)
 
-The database is built optimally to separate users, core master product catalogs, and transactional records (inbound and outbound).
+The database is structured optimally to separate user management, core master product catalogs, and transactional records (inbound and outbound).
 
 ```mermaid
 erDiagram
@@ -84,12 +84,12 @@ erDiagram
 ```
 
 ### Table Relationships
-- `products` ↔ `inbounds`: One-to-Many. One product SKU can have multiple incoming shipments over time.
-- `products` ↔ `outbounds`: Relational via JSON. The `items_json` column in `outbounds` contains arrays of SKUs and quantities dispatched in that shipment, avoiding complex pivot tables and keeping reads extremely fast for reporting.
+- **Products and Inbounds**: One-to-Many. A single product SKU can have multiple incoming shipments over time.
+- **Products and Outbounds**: Relational via JSON. The `items_json` column in `outbounds` contains arrays of SKUs and quantities dispatched in that shipment. This approach minimizes complex pivot tables and maintains high read performance for reporting.
 
 ---
 
-## 🔧 Installation Guide
+## Installation Guide
 
 Follow these instructions to set up the project locally.
 
@@ -130,10 +130,10 @@ Follow these instructions to set up the project locally.
 
 ---
 
-## 📈 Recent Updates
-- Transitioned Dashboard Charts (Weekly Flow & Category Distribution) to pull **real-time data** dynamically from the database.
-- Implemented **mobile-first responsive media queries**, ensuring sidebars and grids collapse naturally on tablet and mobile viewports.
-- Enhanced **User Management** with the ability to define external profile image URLs instead of consuming local storage.
+## Recent Updates
+- Transitioned Dashboard Charts (Weekly Flow & Category Distribution) to pull real-time data dynamically from the database.
+- Implemented mobile-first responsive media queries, ensuring sidebars and grids collapse naturally on tablet and mobile viewports.
+- Enhanced User Management with the ability to define external profile image URLs instead of consuming local storage.
 
-## 🤝 Contributing
-For internal Berdikari Jaya development staff: Please create a feature branch off `main` before submitting pull requests. Ensure all endpoints are tested and database changes come with proper migration files.
+## Contributing
+For internal Berdikari Jaya development staff: Please create a feature branch off the `main` branch before submitting pull requests. Ensure all endpoints are tested and database changes come with proper migration files.
