@@ -49,4 +49,28 @@ class InboundController extends Controller
 
         return response()->json(['success' => true, 'message' => 'Stok berhasil diperbarui', 'product' => $product]);
     }
+
+    public function update(Request $request, $id)
+    {
+        $inbound = Inbound::findOrFail($id);
+
+        $validated = $request->validate([
+            'sku' => 'required|string',
+            'qty' => 'required|integer|min:1',
+            'supplier' => 'nullable|string',
+            'receive_date' => 'required|date'
+        ]);
+
+        $inbound->update($validated);
+
+        return response()->json(['success' => true, 'message' => 'Inbound updated successfully', 'inbound' => $inbound]);
+    }
+
+    public function destroy($id)
+    {
+        $inbound = Inbound::findOrFail($id);
+        $inbound->delete();
+
+        return response()->json(['success' => true, 'message' => 'Inbound deleted successfully']);
+    }
 }

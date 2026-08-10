@@ -18,7 +18,8 @@ class PageController extends Controller
 
     public function inbound()
     {
-        return view('pages.inbound');
+        $inbounds = \App\Models\Inbound::orderBy('created_at', 'desc')->get();
+        return view('pages.inbound', compact('inbounds'));
     }
 
     public function outbound()
@@ -43,6 +44,7 @@ class PageController extends Controller
 
     public function users()
     {
-        return view('pages.users');
+        $users = \App\Models\User::orderBy('created_at', 'desc')->get();
+        return view('pages.users', compact('users'));
     }
 }

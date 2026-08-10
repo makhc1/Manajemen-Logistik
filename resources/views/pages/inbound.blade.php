@@ -93,6 +93,46 @@
                             <svg id="liveBarcodeSvg"></svg>
                         </div>
                     </div>
+                    </div>
+                </div>
+
+                <!-- History Inbounds Table -->
+                <div class="card" style="margin-top: 1.5rem;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                        <h3 style="font-size: 1.1rem; font-weight: 800; color: #0F172A;">Inbound History</h3>
+                    </div>
+                    <div style="overflow-x: auto;">
+                        <table class="custom-table">
+                            <thead>
+                                <tr>
+                                    <th>Receive Date</th>
+                                    <th>SKU</th>
+                                    <th>Supplier</th>
+                                    <th>Qty Received</th>
+                                    <th style="text-align: right;">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach($inbounds as $inbound)
+                                <tr>
+                                    <td>{{ \Carbon\Carbon::parse($inbound->receive_date)->format('d M Y') }}</td>
+                                    <td style="font-weight: 700; color: var(--primary-orange);">{{ $inbound->sku }}</td>
+                                    <td>{{ $inbound->supplier ?? '-' }}</td>
+                                    <td><span style="background: #F1F5F9; color: #1E293B; padding: 2px 8px; border-radius: 6px; font-weight: 800;">{{ $inbound->qty }}</span></td>
+                                    <td style="text-align: right;">
+                                        <button onclick="editInbound({{ $inbound->id }}, '{{ addslashes($inbound->sku) }}', {{ $inbound->qty }}, '{{ addslashes($inbound->supplier) }}', '{{ $inbound->receive_date }}')" class="btn-action" style="background: #F1F5F9; color: #3B82F6; padding: 0.4rem 0.6rem; margin-right: 0.25rem; display: inline-flex;"><i class="fa-solid fa-pen"></i></button>
+                                        <button onclick="deleteInbound({{ $inbound->id }})" class="btn-action" style="background: #FEE2E2; color: #EF4444; padding: 0.4rem 0.6rem; display: inline-flex;"><i class="fa-solid fa-trash"></i></button>
+                                    </td>
+                                </tr>
+                                @endforeach
+                                @if($inbounds->isEmpty())
+                                <tr>
+                                    <td colspan="5" style="text-align: center; color: #94A3B8; padding: 1.5rem;">Belum ada data barang masuk.</td>
+                                </tr>
+                                @endif
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
 @endsection

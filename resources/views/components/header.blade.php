@@ -19,11 +19,15 @@
                     <div class="notification-badge"></div>
                 </div>
 
-                <div class="user-profile" onclick="showToast('Profile: Liara (PT Berdikari Jaya)')">
-                    <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=120&q=80" alt="Liara Profile" class="avatar">
+                <div class="user-profile" onclick="showToast('Profile: {{ Auth::user()->name }}')">
+                    @if(Auth::user()->profile_image_url)
+                        <img src="{{ Auth::user()->profile_image_url }}" alt="{{ Auth::user()->name }} Profile" class="avatar" style="object-fit: cover;">
+                    @else
+                        <img src="https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->name) }}&background=E85A1C&color=fff" alt="{{ Auth::user()->name }} Profile" class="avatar">
+                    @endif
                     <div>
-                        <div style="font-size: 0.85rem; font-weight: 700; color: #0F172A;">Liara</div>
-                        <div style="font-size: 0.725rem; color: #64748B;">PT Berdikari Jaya</div>
+                        <div style="font-size: 0.85rem; font-weight: 700; color: #0F172A;">{{ Auth::user()->name }}</div>
+                        <div style="font-size: 0.725rem; color: #64748B;">{{ Auth::user()->role ?? 'Warehouse Staff' }}</div>
                     </div>
                 </div>
             </div>

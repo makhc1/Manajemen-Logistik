@@ -72,7 +72,7 @@
                         </div>
                     </div>
 
-                    <button type="submit" class="w-full h-11 rounded-md font-medium text-white bg-orange-600 hover:bg-orange-700 transition-all duration-300 shadow-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2 flex items-center justify-center gap-2">
+                    <button type="submit" class="w-full h-11 rounded-md font-medium text-white bg-orange-600 hover:bg-orange-700 hover:-translate-y-0.5 hover:shadow-xl active:translate-y-0 transition-all duration-300 shadow-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2 flex items-center justify-center gap-2">
                         Sign up
                     </button>
                     

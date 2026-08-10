@@ -25,43 +25,82 @@
         syncPickingListToSuratJalan();
     });
 
-    function initChart() {
-        const ctx = document.getElementById('weeklyFlowChart');
-        if (!ctx) return;
-        flowChartInstance = new Chart(ctx.getContext('2d'), {
-            type: 'bar',
-            data: {
-                labels: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
-                datasets: [
-                    {
-                        label: 'Barang Masuk',
-                        data: [42, 30, 42, 45, 38, 35, 40],
-                        backgroundColor: '#E85A1C',
-                        borderRadius: 6,
+    let categoryChartInstance = null;
+
+    async function initChart() {
+        const ctxBar = document.getElementById('weeklyFlowChart');
+        const ctxDoughnut = document.getElementById('categoryDistributionChart');
+        if (!ctxBar) return;
+
+        try {
+            const res = await fetch('/api/dashboard/charts');
+            const data = await res.json();
+            
+            if (data.success) {
+                // Initialize Bar Chart
+                flowChartInstance = new Chart(ctxBar.getContext('2d'), {
+                    type: 'bar',
+                    data: {
+                        labels: data.bar_chart.labels,
+                        datasets: [
+                            {
+                                label: 'Barang Masuk',
+                                data: data.bar_chart.inbound,
+                                backgroundColor: '#E85A1C',
+                                borderRadius: 6,
+                            },
+                            {
+                                label: 'Barang Keluar',
+                                data: data.bar_chart.outbound,
+                                backgroundColor: '#1E3A8A',
+                                borderRadius: 6,
+                            }
+                        ]
                     },
-                    {
-                        label: 'Barang Keluar',
-                        data: [25, 25, 28, 25, 30, 45, 25],
-                        backgroundColor: '#1E3A8A',
-                        borderRadius: 6,
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                position: 'top',
+                                labels: { font: { family: 'Plus Jakarta Sans', weight: '600' } }
+                            }
+                        },
+                        scales: {
+                            y: { beginAtZero: true, grid: { color: '#F1F5F9' } },
+                            x: { grid: { display: false } }
+                        }
                     }
-                ]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        position: 'top',
-                        labels: { font: { family: 'Plus Jakarta Sans', weight: '600' } }
-                    }
-                },
-                scales: {
-                    y: { beginAtZero: true, grid: { color: '#F1F5F9' } },
-                    x: { grid: { display: false } }
+                });
+
+                // Initialize Doughnut Chart
+                if (ctxDoughnut) {
+                    categoryChartInstance = new Chart(ctxDoughnut.getContext('2d'), {
+                        type: 'doughnut',
+                        data: {
+                            labels: data.circle_chart.labels,
+                            datasets: [{
+                                data: data.circle_chart.data,
+                                backgroundColor: ['#E85A1C', '#1E3A8A', '#3B82F6', '#10B981', '#F59E0B', '#6366F1'],
+                                borderWidth: 0
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: {
+                                legend: {
+                                    position: 'right',
+                                    labels: { font: { family: 'Plus Jakarta Sans', weight: '600' }, boxWidth: 12 }
+                                }
+                            }
+                        }
+                    });
                 }
             }
-        });
+        } catch (e) {
+            console.error('Failed to fetch chart data', e);
+        }
     }
 
     function renderAll() {
@@ -87,7 +126,11 @@
                     <td><span style="background: #F1F5F9; padding: 2px 8px; border-radius: 6px; font-weight: 600; font-size: 0.75rem;">${item.category}</span></td>
                     <td><span style="color: #C2410C; font-weight: 800;">${item.stock}</span></td>
                     <td>${item.location}</td>
-                    <td><button class="btn-reorder" onclick="triggerReorder('${item.sku}')">Reorder</button></td>
+                    <td>
+                        <button class="btn-reorder" onclick="event.stopPropagation(); triggerReorder('${item.sku}')">Reorder</button>
+                        <button class="btn-action" style="background: #F1F5F9; color: #3B82F6; padding: 0.4rem 0.6rem; margin-left: 0.25rem; display: inline-flex;" onclick="event.stopPropagation(); editProduct(${item.id}, '${item.name}', '${item.category}', ${item.stock}, '${item.location}', '${item.brand || ''}')"><i class="fa-solid fa-pen"></i></button>
+                        <button class="btn-action" style="background: #FEE2E2; color: #EF4444; padding: 0.4rem 0.6rem; margin-left: 0.25rem; display: inline-flex;" onclick="event.stopPropagation(); deleteProduct(${item.id})"><i class="fa-solid fa-trash"></i></button>
+                    </td>
                 </tr>
             `).join('');
         }
@@ -106,7 +149,11 @@
                     <td><span style="background: #F1F5F9; padding: 2px 8px; border-radius: 6px; font-weight: 600; font-size: 0.75rem;">${item.category}</span></td>
                     <td style="font-weight: 800;">${item.stock}</td>
                     <td><span style="color: var(--primary-orange); font-weight: 700;">${item.location}</span></td>
-                    <td><button class="btn-reorder" onclick="event.stopPropagation(); triggerReorder('${item.sku}')">Reorder</button></td>
+                    <td>
+                        <button class="btn-reorder" onclick="event.stopPropagation(); triggerReorder('${item.sku}')">Reorder</button>
+                        <button class="btn-action" style="background: #F1F5F9; color: #3B82F6; padding: 0.4rem 0.6rem; margin-left: 0.25rem; display: inline-flex;" onclick="event.stopPropagation(); editProduct(${item.id}, '${item.name}', '${item.category}', ${item.stock}, '${item.location}', '${item.brand || ''}')"><i class="fa-solid fa-pen"></i></button>
+                        <button class="btn-action" style="background: #FEE2E2; color: #EF4444; padding: 0.4rem 0.6rem; margin-left: 0.25rem; display: inline-flex;" onclick="event.stopPropagation(); deleteProduct(${item.id})"><i class="fa-solid fa-trash"></i></button>
+                    </td>
                 </tr>
             `).join('');
         }
@@ -210,6 +257,7 @@
                 document.getElementById('modalProdLoc').innerText = `${location} • ${origin}`;
                 try { JsBarcode('#modalBarcodeSvg', sku, { format: 'CODE128', width: 2, height: 60, displayValue: true }); } catch(err) {}
                 document.getElementById('barcodePrintModal').classList.add('active');
+                setTimeout(() => window.location.reload(), 2000); // Reload to show in history table
             }
         } catch (e) {
             showToast('Gagal menyimpan data ke server!');
@@ -406,5 +454,187 @@
             }
         } catch (e) {
             showToast('Gagal menambahkan produk!');
+        }
+    }
+
+    // --- PRODUCT CRUD ---
+    function editProduct(id, name, category, stock, location, brand) {
+        document.getElementById('editProdId').value = id;
+        document.getElementById('editProdName').value = name;
+        document.getElementById('editProdCategory').value = category;
+        document.getElementById('editProdStock').value = stock;
+        document.getElementById('editProdLocation').value = location;
+        document.getElementById('editProdBrand').value = brand;
+        document.getElementById('editProductModal').classList.add('active');
+    }
+
+    function closeEditProductModal() {
+        document.getElementById('editProductModal').classList.remove('active');
+    }
+
+    async function handleEditProductSubmit(e) {
+        e.preventDefault();
+        const id = document.getElementById('editProdId').value;
+        const name = document.getElementById('editProdName').value;
+        const category = document.getElementById('editProdCategory').value;
+        const stock = parseInt(document.getElementById('editProdStock').value);
+        const location = document.getElementById('editProdLocation').value;
+        const brand = document.getElementById('editProdBrand').value;
+
+        try {
+            const res = await fetch(`/api/products/${id}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+                body: JSON.stringify({ name, category, stock, location, brand })
+            });
+            const data = await res.json();
+            if (data.success) {
+                fetchProducts();
+                closeEditProductModal();
+                showToast('Product updated successfully!');
+            }
+        } catch (e) {
+            showToast('Failed to update product!');
+        }
+    }
+
+    async function deleteProduct(id) {
+        if (!confirm('Are you sure you want to delete this product?')) return;
+        try {
+            const res = await fetch(`/api/products/${id}`, { method: 'DELETE', headers: { 'Accept': 'application/json' } });
+            const data = await res.json();
+            if (data.success) {
+                fetchProducts();
+                showToast('Product deleted successfully!');
+            }
+        } catch (e) {
+            showToast('Failed to delete product!');
+        }
+    }
+
+    // --- USER CRUD ---
+    function openUserModal() {
+        document.getElementById('userModal').classList.add('active');
+        document.getElementById('userForm').reset();
+        document.getElementById('userId').value = '';
+        document.getElementById('userProfileImage').value = '';
+        document.getElementById('userModalTitle').innerText = 'Add New User';
+    }
+
+    function closeUserModal() {
+        document.getElementById('userModal').classList.remove('active');
+    }
+
+    function editUser(id, name, email, role, status, profileImageUrl) {
+        document.getElementById('userModalTitle').innerText = 'Edit User';
+        document.getElementById('userId').value = id;
+        document.getElementById('userName').value = name;
+        document.getElementById('userEmail').value = email;
+        document.getElementById('userPassword').value = '';
+        document.getElementById('userRole').value = role || 'Warehouse Staff';
+        document.getElementById('userStatus').value = status || 'Active';
+        document.getElementById('userProfileImage').value = profileImageUrl || '';
+        document.getElementById('userModal').classList.add('active');
+    }
+
+    async function handleUserSubmit(e) {
+        e.preventDefault();
+        const id = document.getElementById('userId').value;
+        const name = document.getElementById('userName').value;
+        const email = document.getElementById('userEmail').value;
+        const password = document.getElementById('userPassword').value;
+        const role = document.getElementById('userRole').value;
+        const status = document.getElementById('userStatus').value;
+        const profile_image_url = document.getElementById('userProfileImage').value || null;
+
+        const url = id ? `/api/users/${id}` : '/api/users';
+        const method = id ? 'PUT' : 'POST';
+        
+        const body = { name, email, role, status, profile_image_url };
+        if (password) body.password = password;
+
+        try {
+            const res = await fetch(url, {
+                method: method,
+                headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+                body: JSON.stringify(body)
+            });
+            const data = await res.json();
+            if (data.success) {
+                closeUserModal();
+                showToast(id ? 'User updated successfully!' : 'User created successfully!');
+                setTimeout(() => window.location.reload(), 1000);
+            } else {
+                showToast('Validation Error / Server Error');
+            }
+        } catch (e) {
+            showToast('Failed to process user');
+        }
+    }
+
+    async function deleteUser(id) {
+        if (!confirm('Are you sure you want to delete this user?')) return;
+        try {
+            const res = await fetch(`/api/users/${id}`, { method: 'DELETE', headers: { 'Accept': 'application/json' } });
+            const data = await res.json();
+            if (data.success) {
+                showToast('User deleted successfully!');
+                setTimeout(() => window.location.reload(), 1000);
+            }
+        } catch (e) {
+            showToast('Failed to delete user');
+        }
+    }
+
+    // --- INBOUND CRUD ---
+    function editInbound(id, sku, qty, supplier, date) {
+        document.getElementById('editInboundId').value = id;
+        document.getElementById('editInboundSku').value = sku;
+        document.getElementById('editInboundQty').value = qty;
+        document.getElementById('editInboundSupplier').value = supplier;
+        document.getElementById('editInboundDate').value = date;
+        document.getElementById('editInboundModal').classList.add('active');
+    }
+
+    function closeEditInboundModal() {
+        document.getElementById('editInboundModal').classList.remove('active');
+    }
+
+    async function handleEditInboundSubmit(e) {
+        e.preventDefault();
+        const id = document.getElementById('editInboundId').value;
+        const sku = document.getElementById('editInboundSku').value;
+        const qty = parseInt(document.getElementById('editInboundQty').value);
+        const supplier = document.getElementById('editInboundSupplier').value;
+        const receive_date = document.getElementById('editInboundDate').value;
+
+        try {
+            const res = await fetch(`/api/inbound/${id}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+                body: JSON.stringify({ sku, qty, supplier, receive_date })
+            });
+            const data = await res.json();
+            if (data.success) {
+                closeEditInboundModal();
+                showToast('Inbound record updated successfully!');
+                setTimeout(() => window.location.reload(), 1000);
+            }
+        } catch (e) {
+            showToast('Failed to update inbound record');
+        }
+    }
+
+    async function deleteInbound(id) {
+        if (!confirm('Are you sure you want to delete this inbound record?')) return;
+        try {
+            const res = await fetch(`/api/inbound/${id}`, { method: 'DELETE', headers: { 'Accept': 'application/json' } });
+            const data = await res.json();
+            if (data.success) {
+                showToast('Inbound record deleted successfully!');
+                setTimeout(() => window.location.reload(), 1000);
+            }
+        } catch (e) {
+            showToast('Failed to delete inbound record');
         }
     }

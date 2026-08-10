@@ -66,4 +66,35 @@ class ProductController extends Controller
 
         return Response::make('', 200, $headers);
     }
+
+    public function update(Request $request, $id)
+    {
+        $product = Product::findOrFail($id);
+
+        $validated = $request->validate([
+            'name' => 'required|string',
+            'category' => 'required|string',
+            'stock' => 'required|integer|min:0',
+            'location' => 'required|string',
+            'brand' => 'nullable|string'
+        ]);
+
+        $product->update([
+            'name' => $validated['name'],
+            'category' => $validated['category'],
+            'stock' => $validated['stock'],
+            'location' => $validated['location'],
+            'brand' => $validated['brand'],
+        ]);
+
+        return response()->json(['success' => true, 'product' => $product]);
+    }
+
+    public function destroy($id)
+    {
+        $product = Product::findOrFail($id);
+        $product->delete();
+
+        return response()->json(['success' => true, 'message' => 'Product deleted successfully']);
+    }
 }
