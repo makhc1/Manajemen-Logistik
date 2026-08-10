@@ -2,7 +2,7 @@
 
 A modern, responsive, and robust Warehouse Management System built with Laravel, JavaScript, and Chart.js. This system handles inventory master data, inbound and outbound tracking, user role management, and provides a real-time analytics dashboard.
 
-![Screenshot](https://images.unsplash.com/photo-1586528116311-ad866f272a51?w=1200&h=400&fit=crop)
+![Screenshot](https://i.ibb.co.com/k2VFGWsd/Screenshot-239.png)
 
 ## Core Features
 
