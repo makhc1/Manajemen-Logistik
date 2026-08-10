@@ -1,7 +1,7 @@
 <aside class="sidebar">
         <div class="brand-header">
             <div class="brand-logo" style="overflow: hidden;">
-                <img src="https://i.pinimg.com/736x/38/97/05/389705f49bf86dbe44e8e65b7d9806ed.jpg" style="width: 100%; height: 100%; object-fit: cover;" alt="Logo Barang">
+                <img src="https://i.ibb.co.com/Wv3cHV2w/46946-page-0001-removebg-preview.png" style="width: 100%; height: 100%; object-fit: cover;" alt="Logo Barang">
             </div>
             <div class="brand-title">WMS</div>
         </div>
