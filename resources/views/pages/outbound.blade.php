@@ -4,43 +4,43 @@
 <div id="outbound-view" class="page-view active">
                 <div class="outbound-grid">
                     <!-- Left: Shipment Form & Picking List -->
-                    <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+                    <div class="flex-col-gap-6">
                         <!-- Create Shipment -->
                         <div class="card">
-                            <div style="margin-bottom: 1rem;">
-                                <h3 style="font-size: 1.1rem; font-weight: 800; color: #0F172A; margin-bottom: 0.25rem;">Outbound / Create Shipment</h3>
-                                <p style="font-size: 0.85rem; color: #64748B;">Pilih barang dari Picking List untuk membuat Surat Jalan. Pastikan data penerima sudah benar.</p>
+                            <div class="mb-4">
+                                <h3 class="outbound-title">Outbound / Create Shipment</h3>
+                                <p class="page-subtitle">Pilih barang dari Picking List untuk membuat Surat Jalan. Pastikan data penerima sudah benar.</p>
                             </div>
 
                             <div class="form-grid-2">
                                 <div>
                                     <label class="form-label">Customer / Receiver</label>
-                                    <input type="text" class="form-input" id="shipmentCustomer" value="PT Berdikari Jaya" oninput="updateSuratJalanInfo()">
+                                    <input type="text" class="form-input" id="shipmentCustomer" value="PT Berdikari Jaya" >
                                 </div>
                                 <div>
                                     <label class="form-label">Shipment Date</label>
-                                    <input type="date" class="form-input" id="shipmentDate" value="2026-08-15" onchange="updateSuratJalanInfo()">
+                                    <input type="date" class="form-input" id="shipmentDate" value="2026-08-15" >
                                 </div>
                             </div>
 
                             <div>
                                 <label class="form-label">Destination Address</label>
-                                <input type="text" class="form-input" id="shipmentDestination" value="Jl. Raya Industri No. 45, Kawasan Logistik, Surabaya" oninput="updateSuratJalanInfo()">
+                                <input type="text" class="form-input" id="shipmentDestination" value="Jl. Raya Industri No. 45, Kawasan Logistik, Surabaya" >
                             </div>
                         </div>
 
                         <!-- Picking List -->
                         <div class="card">
-                            <h3 style="font-size: 1.1rem; font-weight: 800; color: #0F172A; margin-bottom: 1rem; display: flex; justify-content: space-between;">
+                            <h3 class="picking-title">
                                 <span>Picking List</span>
-                                <span style="font-size: 0.8rem; color: var(--primary-orange);" id="pickingSelectedCount">4 Selected Items</span>
+                                <span class="picking-count" id="pickingSelectedCount">4 Selected Items</span>
                             </h3>
 
-                            <div id="pickingListContainer" style="display: flex; flex-direction: column; gap: 0.75rem; margin-bottom: 1.25rem; max-height: 300px; overflow-y: auto;">
-                                <div style="text-align: center; color: #94A3B8; padding: 1rem; font-size: 0.85rem;">Memuat daftar produk...</div>
+                            <div id="pickingListContainer" class="picking-container">
+                                <div class="empty-state-text">Memuat daftar produk...</div>
                             </div>
 
-                            <button class="btn-action btn-pdf" style="width: 100%; padding: 0.85rem; font-size: 0.9rem;" onclick="processOutboundStockUpdate()">
+                            <button class="btn-action btn-pdf w-full py-3 text-sm" id="processOutboundBtn">
                                 <i class="fa-solid fa-rotate"></i> Update Stock Automatically
                             </button>
                         </div>
@@ -51,33 +51,33 @@
                         <div class="sj-header">
                             <div>
                                 <div class="sj-title">Surat Jalan</div>
-                                <div style="font-size: 0.8rem; color: #64748B;">Shipment Number: <strong style="color: #0F172A;" id="sjNumberDisplay">SJ-30241028-001</strong></div>
+                                <div class="sj-subtitle">Shipment Number: <strong class="text-dark" id="sjNumberDisplay">SJ-30241028-001</strong></div>
                             </div>
                             <div>
                                 <svg id="suratJalanBarcode"></svg>
                             </div>
                         </div>
 
-                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; font-size: 0.8rem; margin-bottom: 1.25rem;">
+                        <div class="sj-grid">
                             <div>
-                                <div style="color: #64748B; font-weight: 600;">Penerima / To:</div>
-                                <div style="font-weight: 800; color: #0F172A;" id="sjReceiverDisplay">PT Berdikari Jaya</div>
-                                <div style="color: #475569;" id="sjAddressDisplay">Gudang Utama Jakarta</div>
-                                <div style="color: #475569;">PIC: Yohanes Jalan</div>
+                                <div class="sj-label">Penerima / To:</div>
+                                <div class="sj-value" id="sjReceiverDisplay">PT Berdikari Jaya</div>
+                                <div class="sj-desc" id="sjAddressDisplay">Gudang Utama Jakarta</div>
+                                <div class="sj-desc">PIC: Yohanes Jalan</div>
                             </div>
-                            <div style="text-align: right;">
-                                <div style="color: #64748B; font-weight: 600;">Nomor Surat Jalan:</div>
-                                <div style="font-weight: 800; color: var(--primary-orange);" id="sjNoDisplay">SJ-30241028-001</div>
-                                <div style="color: #475569;">Tanggal: <span id="sjDateDisplay">25/09/2026</span></div>
+                            <div class="text-right">
+                                <div class="sj-label">Nomor Surat Jalan:</div>
+                                <div class="sj-value-orange" id="sjNoDisplay">SJ-30241028-001</div>
+                                <div class="sj-desc">Tanggal: <span id="sjDateDisplay">25/09/2026</span></div>
                             </div>
                         </div>
 
-                        <table class="custom-table" style="margin-bottom: 1.25rem;">
+                        <table class="custom-table mb-5">
                             <thead>
-                                <tr style="background: #1E293B; color: white;">
-                                    <th style="color: white;">Item</th>
-                                    <th style="color: white; text-align: center;">Quantity</th>
-                                    <th style="color: white; text-align: right;">Date</th>
+                                <tr class="bg-dark-header">
+                                    <th class="text-white">Item</th>
+                                    <th class="text-white text-center">Quantity</th>
+                                    <th class="text-white text-right">Date</th>
                                 </tr>
                             </thead>
                             <tbody id="suratJalanTableBody">
@@ -85,20 +85,20 @@
                             </tbody>
                         </table>
 
-                        <div style="display: flex; justify-content: space-between; align-items: center; border-top: 2px solid #E2E8F0; padding-top: 0.85rem; font-size: 0.85rem; font-weight: 800;">
+                        <div class="sj-summary">
                             <span>Total Item Outbound:</span>
-                            <span style="color: var(--primary-orange);" id="sjTotalSummary">Total: SJ-302415-001</span>
+                            <span class="text-primary-orange" id="sjTotalSummary">Total: SJ-302415-001</span>
                         </div>
 
                         <!-- Action Bar -->
                         <div class="action-bar">
-                            <button class="btn-action btn-pdf" onclick="downloadSuratJalanPDF()">
+                            <button class="btn-action btn-pdf" id="downloadSuratJalanBtn">
                                 <i class="fa-solid fa-file-pdf"></i> Download PDF
                             </button>
-                            <button class="btn-action btn-share" onclick="shareSuratJalan()">
+                            <button class="btn-action btn-share" id="shareSuratJalanBtn">
                                 <i class="fa-solid fa-share-nodes"></i> Share
                             </button>
-                            <button class="btn-action btn-print" onclick="window.print()">
+                            <button class="btn-action btn-print" id="printSuratJalanBtn">
                                 <i class="fa-solid fa-print"></i> Print
                             </button>
                         </div>

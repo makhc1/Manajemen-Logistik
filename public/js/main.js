@@ -104,13 +104,13 @@
                 const statInboundToday = document.getElementById('statInboundToday');
                 if (statInboundToday && data.bar_chart.inbound.length > 0) {
                     const todayInbound = data.bar_chart.inbound[data.bar_chart.inbound.length - 1];
-                    statInboundToday.innerHTML = `${todayInbound.toLocaleString()} <span style="font-size: 0.85rem; font-weight: 600; color: var(--text-muted);">Units</span>`;
+                    statInboundToday.innerHTML = `${todayInbound.toLocaleString()} <span class="stat-unit">Units</span>`;
                 }
 
                 const statOutboundToday = document.getElementById('statOutboundToday');
                 if (statOutboundToday && data.bar_chart.outbound.length > 0) {
                     const todayOutbound = data.bar_chart.outbound[data.bar_chart.outbound.length - 1];
-                    statOutboundToday.innerHTML = `${todayOutbound.toLocaleString()} <span style="font-size: 0.85rem; font-weight: 600; color: var(--text-muted);">Units</span>`;
+                    statOutboundToday.innerHTML = `${todayOutbound.toLocaleString()} <span class="stat-unit">Units</span>`;
                 }
 
                 // Initialize Bar Chart
@@ -190,25 +190,25 @@
         if (statTotalStock) statTotalStock.innerText = totalStock.toLocaleString();
         
         const statLowStockCount = document.getElementById('statLowStockCount');
-        if (statLowStockCount) statLowStockCount.innerHTML = `${lowStockItems.length} <span style="font-size: 0.85rem; font-weight: 600;">Items</span>`;
+        if (statLowStockCount) statLowStockCount.innerHTML = `${lowStockItems.length} <span class="stat-unit-alert">Items</span>`;
 
         // 2. Render Low Stock Table
         const lowStockBody = document.getElementById('lowStockTableBody');
         if (lowStockBody) {
             if (lowStockItems.length === 0) {
-                lowStockBody.innerHTML = `<tr><td colspan="6" style="text-align: center; color: #94A3B8; padding: 2rem;">Semua stok dalam keadaan aman.</td></tr>`;
+                lowStockBody.innerHTML = `<tr><td colspan="6" class="empty-state-p2">Semua stok dalam keadaan aman.</td></tr>`;
             } else {
                 lowStockBody.innerHTML = lowStockItems.map(item => `
                     <tr>
-                        <td style="font-weight: 700;">${item.name}</td>
-                        <td style="color: #64748B;">${item.sku}</td>
-                        <td><span style="background: #F1F5F9; padding: 2px 8px; border-radius: 6px; font-weight: 600; font-size: 0.75rem;">${item.category}</span></td>
-                        <td><span style="color: #C2410C; font-weight: 800;">${item.stock}</span></td>
+                        <td class="fw-bold">${item.name}</td>
+                        <td class="text-slate-500">${item.sku}</td>
+                        <td><span class="badge-category">${item.category}</span></td>
+                        <td><span class="text-danger-stock">${item.stock}</span></td>
                         <td>${item.location}</td>
                         <td>
                             <button class="btn-reorder" onclick="event.stopPropagation(); triggerReorder('${item.sku}')">Reorder</button>
-                            <button class="btn-action" style="background: #F1F5F9; color: #3B82F6; padding: 0.4rem 0.6rem; margin-left: 0.25rem; display: inline-flex;" onclick="event.stopPropagation(); editProduct(${item.id}, '${item.name}', '${item.category}', ${item.stock}, '${item.location}', '${item.brand || ''}')"><i class="fa-solid fa-pen"></i></button>
-                            <button class="btn-action" style="background: #FEE2E2; color: #EF4444; padding: 0.4rem 0.6rem; margin-left: 0.25rem; display: inline-flex;" onclick="event.stopPropagation(); deleteProduct(${item.id})"><i class="fa-solid fa-trash"></i></button>
+                            <button class="btn-action btn-edit btn-edit-product" data-id="${item.id}" data-name="${item.name}" data-category="${item.category}" data-stock="${item.stock}" data-location="${item.location}" data-brand="${item.brand || ''}"><i class="fa-solid fa-pen"></i></button>
+                            <button class="btn-action btn-delete btn-delete-product" data-id="${item.id}"><i class="fa-solid fa-trash"></i></button>
                         </td>
                     </tr>
                 `).join('');
@@ -219,25 +219,25 @@
         const masterBody = document.getElementById('masterTableBody');
         if (masterBody) {
             if (products.length === 0) {
-                masterBody.innerHTML = `<tr><td colspan="7" style="text-align: center; color: #94A3B8; padding: 2rem;">Belum ada data produk. Klik "Add Product" untuk menambahkan.</td></tr>`;
+                masterBody.innerHTML = `<tr><td colspan="7" class="empty-state-p2">Belum ada data produk. Klik "Add Product" untuk menambahkan.</td></tr>`;
                 const productDetailCard = document.getElementById('productDetailCard');
                 if (productDetailCard) productDetailCard.style.display = 'none';
             } else {
                 masterBody.innerHTML = products.map((item, idx) => `
-                    <tr onclick="selectProductDetail('${item.sku}')" style="cursor: pointer;">
+                    <tr onclick="selectProductDetail('${item.sku}')" class="cursor-pointer">
                         <td><input type="checkbox" ${idx === 0 ? 'checked' : ''}></td>
-                        <td style="font-weight: 700; display: flex; align-items: center; gap: 0.5rem;">
-                            <i class="fa-solid fa-box" style="color: var(--primary-orange);"></i>
+                        <td class="fw-bold flex-center-gap-2">
+                            <i class="fa-solid fa-box" class="text-primary-orange"></i>
                             ${item.name}
                         </td>
-                        <td style="color: #64748B; font-weight: 600;">${item.sku}</td>
-                        <td><span style="background: #F1F5F9; padding: 2px 8px; border-radius: 6px; font-weight: 600; font-size: 0.75rem;">${item.category}</span></td>
-                        <td style="font-weight: 800;">${item.stock}</td>
+                        <td class="fw-600 text-slate-500">${item.sku}</td>
+                        <td><span class="badge-category">${item.category}</span></td>
+                        <td class="fw-800">${item.stock}</td>
                         <td><span style="color: var(--primary-orange); font-weight: 700;">${item.location}</span></td>
                         <td>
                             <button class="btn-reorder" onclick="event.stopPropagation(); triggerReorder('${item.sku}')">Reorder</button>
-                            <button class="btn-action" style="background: #F1F5F9; color: #3B82F6; padding: 0.4rem 0.6rem; margin-left: 0.25rem; display: inline-flex;" onclick="event.stopPropagation(); editProduct(${item.id}, '${item.name}', '${item.category}', ${item.stock}, '${item.location}', '${item.brand || ''}')"><i class="fa-solid fa-pen"></i></button>
-                            <button class="btn-action" style="background: #FEE2E2; color: #EF4444; padding: 0.4rem 0.6rem; margin-left: 0.25rem; display: inline-flex;" onclick="event.stopPropagation(); deleteProduct(${item.id})"><i class="fa-solid fa-trash"></i></button>
+                            <button class="btn-action btn-edit btn-edit-product" data-id="${item.id}" data-name="${item.name}" data-category="${item.category}" data-stock="${item.stock}" data-location="${item.location}" data-brand="${item.brand || ''}"><i class="fa-solid fa-pen"></i></button>
+                            <button class="btn-action btn-delete btn-delete-product" data-id="${item.id}"><i class="fa-solid fa-trash"></i></button>
                         </td>
                     </tr>
                 `).join('');
@@ -258,20 +258,20 @@
             const dateStr = new Date().toLocaleDateString('id-ID', {day: '2-digit', month: '2-digit', year: 'numeric'});
             
             if(availableProducts.length === 0) {
-                 pickingListContainer.innerHTML = '<div style="text-align: center; color: #94A3B8; padding: 1.5rem; font-size: 0.85rem;">Belum ada barang dengan stok tersedia.</div>';
+                 pickingListContainer.innerHTML = '<div class="empty-state-text">Belum ada barang dengan stok tersedia.</div>';
             } else {
                 pickingListContainer.innerHTML = availableProducts.map(item => `
-                    <div class="picking-row" style="display: flex; align-items: center; justify-content: space-between; padding: 0.65rem 0.85rem; background: #F8FAFC; border-radius: 8px; border: 1px solid #E2E8F0;">
-                        <label style="display: flex; align-items: center; gap: 0.65rem; flex: 1; cursor: pointer; margin: 0;">
+                    <div class="picking-row" class="picking-row-container">
+                        <label class="picking-label">
                             <input type="checkbox" class="pick-item" onchange="syncPickingListToSuratJalan()" data-name="${item.name}" data-date="${dateStr}">
-                            <div style="display: flex; flex-direction: column;">
-                                <span style="font-size: 0.85rem; font-weight: 700;">${item.name}</span>
-                                <span style="font-size: 0.7rem; color: #64748B;">Stok Tersedia: <strong style="color: var(--primary-orange);">${item.stock}</strong> units</span>
+                            <div class="flex-col">
+                                <span class="fw-bold text-sm">${item.name}</span>
+                                <span class="picking-stock-info">Stok Tersedia: <strong class="text-primary-orange">${item.stock}</strong> units</span>
                             </div>
                         </label>
-                        <div style="display: flex; align-items: center; gap: 0.5rem;">
-                            <span style="font-size: 0.75rem; color: #64748B; font-weight: 600;">Qty:</span>
-                            <input type="number" class="pick-qty form-input" style="width: 70px; padding: 0.35rem; border-radius: 6px; text-align: center; height: auto;" min="1" max="${item.stock}" value="1" oninput="const cb = this.closest('.picking-row').querySelector('.pick-item'); if(cb.checked) syncPickingListToSuratJalan();">
+                        <div class="flex-center-gap-2">
+                            <span class="qty-label">Qty:</span>
+                            <input type="number" class="pick-qty form-input" class="pick-qty-input" min="1" max="${item.stock}" value="1" oninput="const cb = this.closest('.picking-row').querySelector('.pick-item'); if(cb.checked) syncPickingListToSuratJalan();">
                         </div>
                     </div>
                 `).join('');
@@ -436,16 +436,16 @@
                 const date = cb.dataset.date || new Date().toLocaleDateString('id-ID');
                 html += `
                     <tr>
-                        <td style="font-weight: 700;">${name}</td>
-                        <td style="text-align: center; font-weight: 800;">x${qty}</td>
-                        <td style="text-align: right;">${date}</td>
+                        <td class="fw-bold">${name}</td>
+                        <td class="text-center fw-800">x${qty}</td>
+                        <td class="text-right">${date}</td>
                     </tr>
                 `;
             }
         });
 
         if (html === '') {
-            html = `<tr><td colspan="3" style="text-align: center; color: #94A3B8;">Belum ada item dipilih</td></tr>`;
+            html = `<tr><td colspan="3" class="text-center text-slate-400">Belum ada item dipilih</td></tr>`;
         }
         
         if (tableBody) tableBody.innerHTML = html;
@@ -557,14 +557,14 @@
                 else if (w.status === 'TRANSIT') badgeColor = '#2563EB';
                 
                 return `
-                    <div style="background: #F8FAFC; border: 1px solid #E2E8F0; padding: 1.25rem; border-radius: 12px; position: relative;">
-                        <h4 style="font-weight: 800; color: #0F172A;">${w.name}</h4>
-                        <p style="font-size: 0.75rem; color: #64748B;">Kapasitas: ${w.percentage}% (${w.capacity_used.toLocaleString()} / ${w.capacity.toLocaleString()} unit)</p>
-                        <span style="font-size: 0.7rem; background: ${badgeColor}; color: white; padding: 2px 8px; border-radius: 6px; font-weight: 700; margin-top: 0.5rem; display: inline-block;">${w.status}</span>
+                    <div class="wh-card">
+                        <h4 class="wh-title">${w.name}</h4>
+                        <p class="wh-capacity">Kapasitas: ${w.percentage}% (${w.capacity_used.toLocaleString()} / ${w.capacity.toLocaleString()} unit)</p>
+                        <span class="wh-badge" style="background: ${badgeColor};">${w.status}</span>
                         
-                        <div style="position: absolute; top: 1rem; right: 1rem; display: flex; gap: 0.5rem;">
-                            <button onclick="editWarehouse(${w.id})" style="background: none; border: none; color: #3B82F6; cursor: pointer;"><i class="fa-solid fa-pen"></i></button>
-                            <button onclick="deleteWarehouse(${w.id})" style="background: none; border: none; color: #EF4444; cursor: pointer;"><i class="fa-solid fa-trash"></i></button>
+                        <div class="wh-actions">
+                            <button class="btn-wh-edit" data-id="${w.id}"><i class="fa-solid fa-pen"></i></button>
+                            <button class="btn-wh-delete" data-id="${w.id}"><i class="fa-solid fa-trash"></i></button>
                         </div>
                     </div>
                 `;
@@ -875,3 +875,202 @@
             showToast('Failed to delete inbound record');
         }
     }
+// EVENT DELEGATION
+document.addEventListener('DOMContentLoaded', function() {
+    document.body.addEventListener('click', function(e) {
+        // Product Actions (from JS generated table)
+        const btnEditProduct = e.target.closest('.btn-edit-product');
+        if(btnEditProduct) {
+            e.stopPropagation();
+            editProduct(
+                btnEditProduct.dataset.id,
+                btnEditProduct.dataset.name,
+                btnEditProduct.dataset.category,
+                btnEditProduct.dataset.stock,
+                btnEditProduct.dataset.location,
+                btnEditProduct.dataset.brand
+            );
+        }
+
+        const btnDeleteProduct = e.target.closest('.btn-delete-product');
+        if(btnDeleteProduct) {
+            e.stopPropagation();
+            deleteProduct(btnDeleteProduct.dataset.id);
+        }
+
+        // Inbound Actions
+        const btnEditInbound = e.target.closest('.btn-edit-inbound');
+        if (btnEditInbound) {
+            editInbound(
+                btnEditInbound.dataset.id,
+                btnEditInbound.dataset.sku,
+                btnEditInbound.dataset.qty,
+                btnEditInbound.dataset.supplier,
+                btnEditInbound.dataset.date
+            );
+        }
+
+        const btnDeleteInbound = e.target.closest('.btn-delete-inbound');
+        if (btnDeleteInbound) {
+            deleteInbound(btnDeleteInbound.dataset.id);
+        }
+        
+        // User Actions
+        const btnEditUser = e.target.closest('.btn-edit-user');
+        if (btnEditUser) {
+            editUser(
+                btnEditUser.dataset.id,
+                btnEditUser.dataset.name,
+                btnEditUser.dataset.email,
+                btnEditUser.dataset.role,
+                btnEditUser.dataset.status,
+                btnEditUser.dataset.image
+            );
+        }
+
+        const btnDeleteUser = e.target.closest('.btn-delete-user');
+        if (btnDeleteUser) {
+            deleteUser(btnDeleteUser.dataset.id);
+        }
+
+        // Warehouse Actions (from JS generated list)
+        const btnWhEdit = e.target.closest('.btn-wh-edit');
+        if(btnWhEdit) {
+            editWarehouse(btnWhEdit.dataset.id);
+        }
+
+        const btnWhDelete = e.target.closest('.btn-wh-delete');
+        if(btnWhDelete) {
+            deleteWarehouse(btnWhDelete.dataset.id);
+        }
+    });
+});
+
+// HTML5 QR Scanner Logic
+document.addEventListener('DOMContentLoaded', function() {
+    let html5QrCode;
+    const startScanBtn = document.getElementById('startScanBtn');
+    const stopScanBtn = document.getElementById('stopScanBtn');
+    const scannerLaser = document.getElementById('scannerLaser');
+    const scannerPlaceholder = document.getElementById('scannerPlaceholder');
+
+    function onScanSuccess(decodedText, decodedResult) {
+        document.getElementById('inboundSku').value = decodedText;
+        
+        if (typeof updateLiveBarcode === 'function') {
+            updateLiveBarcode(decodedText);
+        }
+        
+        if (typeof showToast === 'function') {
+            showToast('Barcode berhasil discan: ' + decodedText);
+        }
+        
+        stopScanning();
+    }
+
+    function onScanFailure(error) {
+        // Handle scan failure - ignore it for continuous scanning
+    }
+
+    function startScanning() {
+        if (!html5QrCode) {
+            if(typeof Html5Qrcode !== 'undefined') {
+                html5QrCode = new Html5Qrcode("reader");
+            } else {
+                showToast("Scanner library not loaded");
+                return;
+            }
+        }
+        
+        const config = { fps: 10, qrbox: { width: 250, height: 100 } };
+        
+        html5QrCode.start({ facingMode: "environment" }, config, onScanSuccess, onScanFailure)
+        .then(() => {
+            startScanBtn.style.display = 'none';
+            stopScanBtn.style.display = 'flex';
+            scannerLaser.classList.remove('d-none');
+            scannerPlaceholder.style.display = 'none';
+        })
+        .catch((err) => {
+            console.error(err);
+            if (typeof showToast === 'function') {
+                showToast('Gagal mengakses kamera. Pastikan izin kamera diberikan.');
+            }
+        });
+    }
+
+    function stopScanning() {
+        if (html5QrCode && html5QrCode.isScanning) {
+            html5QrCode.stop().then(() => {
+                startScanBtn.style.display = 'flex';
+                stopScanBtn.style.display = 'none';
+                scannerLaser.classList.add('d-none');
+                scannerPlaceholder.style.display = 'block';
+            }).catch((err) => {
+                console.error("Failed to stop scanning.", err);
+            });
+        }
+    }
+
+    if(startScanBtn) {
+        startScanBtn.addEventListener('click', startScanning);
+    }
+    if(stopScanBtn) {
+        stopScanBtn.addEventListener('click', stopScanning);
+    }
+    
+    // Wire up event listeners for inputs instead of onchange/oninput in HTML
+    const masterSearch = document.getElementById('masterSearch');
+    if(masterSearch) {
+        masterSearch.addEventListener('input', (e) => filterMasterTable(e.target.value));
+    }
+    
+    const masterCategoryFilter = document.getElementById('masterCategoryFilter');
+    if(masterCategoryFilter) {
+        masterCategoryFilter.addEventListener('change', (e) => filterCategory(e.target.value));
+    }
+    
+    const openAddProductModalBtn = document.getElementById('openAddProductModalBtn');
+    if(openAddProductModalBtn) {
+        openAddProductModalBtn.addEventListener('click', openAddProductModal);
+    }
+    
+    const inboundForm = document.getElementById('inboundForm');
+    if(inboundForm) {
+        inboundForm.addEventListener('submit', handleInboundSubmit);
+    }
+    
+    const inboundSku = document.getElementById('inboundSku');
+    if(inboundSku) {
+        inboundSku.addEventListener('input', (e) => updateLiveBarcode(e.target.value));
+    }
+    
+    const shipmentCustomer = document.getElementById('shipmentCustomer');
+    const shipmentDate = document.getElementById('shipmentDate');
+    const shipmentDestination = document.getElementById('shipmentDestination');
+    
+    if(shipmentCustomer) shipmentCustomer.addEventListener('input', updateSuratJalanInfo);
+    if(shipmentDate) shipmentDate.addEventListener('change', updateSuratJalanInfo);
+    if(shipmentDestination) shipmentDestination.addEventListener('input', updateSuratJalanInfo);
+    
+    const processOutboundBtn = document.getElementById('processOutboundBtn');
+    if(processOutboundBtn) processOutboundBtn.addEventListener('click', processOutboundStockUpdate);
+    
+    const downloadSuratJalanBtn = document.getElementById('downloadSuratJalanBtn');
+    if(downloadSuratJalanBtn) downloadSuratJalanBtn.addEventListener('click', downloadSuratJalanPDF);
+    
+    const shareSuratJalanBtn = document.getElementById('shareSuratJalanBtn');
+    if(shareSuratJalanBtn) shareSuratJalanBtn.addEventListener('click', shareSuratJalan);
+    
+    const printSuratJalanBtn = document.getElementById('printSuratJalanBtn');
+    if(printSuratJalanBtn) printSuratJalanBtn.addEventListener('click', () => window.print());
+    
+    const openAddWarehouseModalBtn = document.getElementById('openAddWarehouseModalBtn');
+    if(openAddWarehouseModalBtn) openAddWarehouseModalBtn.addEventListener('click', openAddWarehouseModal);
+    
+    const closeWhModalBtn = document.getElementById('closeWhModalBtn');
+    if(closeWhModalBtn) closeWhModalBtn.addEventListener('click', () => closeModal('whModal'));
+    
+    const openUserModalBtn = document.getElementById('openUserModalBtn');
+    if(openUserModalBtn) openUserModalBtn.addEventListener('click', openUserModal);
+});
