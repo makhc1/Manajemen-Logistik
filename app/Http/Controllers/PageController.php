@@ -32,16 +32,6 @@ class PageController extends Controller
         return view('pages.warehouses');
     }
 
-    public function security()
-    {
-        return view('pages.security');
-    }
-
-    public function settings()
-    {
-        return view('pages.settings');
-    }
-
     public function users()
     {
         $users = \App\Models\User::orderBy('created_at', 'desc')->get();

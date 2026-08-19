@@ -6,7 +6,5 @@
     @include('pages.inbound')
     @include('pages.outbound')
     @include('pages.warehouses')
-    @include('pages.security')
-    @include('pages.settings')
     @include('pages.users')
 @endsection

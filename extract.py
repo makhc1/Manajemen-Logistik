@@ -38,7 +38,7 @@ header = extract_tag(content, 'header', 'class="header"')
 with open('resources/views/components/header.blade.php', 'w', encoding='utf-8') as f: f.write(header)
 
 # Pages
-pages = ['dashboard', 'master', 'inbound', 'outbound', 'warehouses', 'security', 'settings', 'users']
+pages = ['dashboard', 'master', 'inbound', 'outbound', 'warehouses', 'users']
 for page in pages:
     page_content = extract_tag(content, 'div', f'id="{page}-view"')
     with open(f'resources/views/pages/{page}.blade.php', 'w', encoding='utf-8') as f: f.write(page_content)

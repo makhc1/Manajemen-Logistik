@@ -1,10 +1,11 @@
 <header class="header">
+            <button class="mobile-menu-btn" id="openSidebarBtn">
+                <i class="fa-solid fa-bars"></i>
+            </button>
             <div class="header-location">
                 <i class="fa-solid fa-location-dot" style="color: var(--primary-orange)"></i>
                 <select id="warehouseSelector" onchange="changeWarehouse(this.value)">
-                    <option value="Gudang Utama Jakarta">Gudang Utama Jakarta</option>
-                    <option value="Gudang Cabang Surabaya">Gudang Cabang Surabaya</option>
-                    <option value="Gudang Transit Bandung">Gudang Transit Bandung</option>
+                    <option value="">Memuat gudang...</option>
                 </select>
             </div>
 

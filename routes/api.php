@@ -6,7 +6,13 @@ use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\InboundController;
 use App\Http\Controllers\Api\OutboundController;
 use App\Http\Controllers\Api\UserController;
+use App\Http\Controllers\Api\WarehouseController;
 use App\Http\Controllers\Api\DashboardController;
+
+Route::get('/warehouses', [WarehouseController::class, 'index']);
+Route::post('/warehouses', [WarehouseController::class, 'store']);
+Route::put('/warehouses/{id}', [WarehouseController::class, 'update']);
+Route::delete('/warehouses/{id}', [WarehouseController::class, 'destroy']);
 
 Route::get('/products', [ProductController::class, 'index']);
 Route::post('/products', [ProductController::class, 'store']);

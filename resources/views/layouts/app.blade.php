@@ -15,6 +15,9 @@
     
     <!-- JsBarcode for barcode rendering -->
     <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode.all.min.js"></script>
+    
+    <!-- Html5Qrcode for camera barcode scanning -->
+    <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
 
     <!-- FontAwesome icons CDN -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -26,6 +29,7 @@
 
 <div class="app-container">
     @include('components.sidebar')
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
     <!-- Main Wrapper -->
     <div class="main-wrapper">

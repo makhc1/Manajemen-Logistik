@@ -5,24 +5,37 @@
                 <div class="inbound-grid">
                     <!-- Left: Scanner Simulator -->
                     <div class="scanner-container">
-                        <div style="width: 100%; display: flex; justify-content: space-between; align-items: center;">
+                        <div style="width: 100%; display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
                             <div style="font-size: 0.9rem; font-weight: 700; display: flex; align-items: center; gap: 0.5rem;">
                                 <i class="fa-solid fa-camera" style="color: var(--primary-orange);"></i>
-                                <span>Live Barcode Scanning</span>
+                                <span>Live Barcode Scanning (Inbound)</span>
                             </div>
-                            <i class="fa-solid fa-bolt" style="cursor: pointer;" onclick="showToast('Flash LED dinyalakan')"></i>
                         </div>
 
-                        <div class="viewfinder">
-                            <div class="laser-line"></div>
-                            <i class="fa-solid fa-qrcode" style="font-size: 4rem; color: rgba(255,255,255,0.15);"></i>
+                        <!-- Step-by-step Guide -->
+                        <div style="background: #F8FAFC; border: 1px solid #E2E8F0; padding: 1rem; border-radius: 12px; margin-bottom: 1rem; text-align: left;">
+                            <h4 style="font-size: 0.85rem; font-weight: 800; color: #0F172A; margin-bottom: 0.5rem;">Panduan Singkat:</h4>
+                            <ol style="font-size: 0.8rem; color: #475569; margin-left: 1.25rem; line-height: 1.6;">
+                                <li>Klik tombol <strong>Kamera</strong> di bawah untuk mulai.</li>
+                                <li>Arahkan kamera ke barcode barang.</li>
+                                <li>Lengkapi detail di form sebelah kanan dan klik <strong>Simpan</strong>.</li>
+                            </ol>
                         </div>
 
-                        <div style="text-align: center; width: 100%;">
+                        <div style="position: relative; width: 100%; max-width: 320px; border-radius: 16px; overflow: hidden; border: 2px dashed rgba(255,255,255,0.2); background: #000; min-height: 240px; display: flex; align-items: center; justify-content: center;">
+                            <div id="reader" style="width: 100%;"></div>
+                            <div class="laser-line" id="scannerLaser" style="display: none; z-index: 10; width: 100%; left: 0;"></div>
+                            <i class="fa-solid fa-qrcode" id="scannerPlaceholder" style="font-size: 4rem; color: rgba(255,255,255,0.15); position: absolute;"></i>
+                        </div>
+
+                        <div style="text-align: center; width: 100%; margin-top: 1.5rem;">
                             <p style="font-size: 0.75rem; color: #94A3B8; margin-bottom: 1rem;">Arahkan kamera ke barcode produk untuk membaca data WMS secara otomatis.</p>
                             <div style="display: flex; justify-content: center; gap: 1rem; align-items: center;">
-                                <button class="shutter-btn" onclick="simulateBarcodeScan()" title="Klik untuk memindai Barcode">
-                                    <i class="fa-solid fa-barcode" style="font-size: 1.25rem; color: var(--primary-orange);"></i>
+                                <button id="startScanBtn" class="shutter-btn" title="Mulai Kamera" type="button">
+                                    <i class="fa-solid fa-camera" style="font-size: 1.25rem; color: var(--primary-orange);"></i>
+                                </button>
+                                <button id="stopScanBtn" class="shutter-btn" title="Hentikan Kamera" type="button" style="display: none; border-color: #EF4444;">
+                                    <i class="fa-solid fa-stop" style="font-size: 1.25rem; color: #EF4444;"></i>
                                 </button>
                             </div>
                         </div>
@@ -98,7 +111,7 @@
 
                 <!-- History Inbounds Table -->
                 <div class="card" style="margin-top: 1.5rem;">
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                    <div class="page-header-row">
                         <h3 style="font-size: 1.1rem; font-weight: 800; color: #0F172A;">Inbound History</h3>
                     </div>
                     <div style="overflow-x: auto;">
@@ -135,4 +148,74 @@
                     </div>
                 </div>
             </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    let html5QrCode;
+    const startScanBtn = document.getElementById('startScanBtn');
+    const stopScanBtn = document.getElementById('stopScanBtn');
+    const scannerLaser = document.getElementById('scannerLaser');
+    const scannerPlaceholder = document.getElementById('scannerPlaceholder');
+
+    function onScanSuccess(decodedText, decodedResult) {
+        document.getElementById('inboundSku').value = decodedText;
+        
+        if (typeof updateLiveBarcode === 'function') {
+            updateLiveBarcode(decodedText);
+        }
+        
+        if (typeof showToast === 'function') {
+            showToast('Barcode berhasil discan: ' + decodedText);
+        }
+        
+        stopScanning();
+    }
+
+    function onScanFailure(error) {
+        // Handle scan failure - ignore it for continuous scanning
+    }
+
+    function startScanning() {
+        if (!html5QrCode) {
+            html5QrCode = new Html5Qrcode("reader");
+        }
+        
+        const config = { fps: 10, qrbox: { width: 250, height: 100 } };
+        
+        html5QrCode.start({ facingMode: "environment" }, config, onScanSuccess, onScanFailure)
+        .then(() => {
+            startScanBtn.style.display = 'none';
+            stopScanBtn.style.display = 'flex';
+            scannerLaser.style.display = 'block';
+            scannerPlaceholder.style.display = 'none';
+        })
+        .catch((err) => {
+            console.error(err);
+            if (typeof showToast === 'function') {
+                showToast('Gagal mengakses kamera. Pastikan izin kamera diberikan.');
+            }
+        });
+    }
+
+    function stopScanning() {
+        if (html5QrCode && html5QrCode.isScanning) {
+            html5QrCode.stop().then(() => {
+                startScanBtn.style.display = 'flex';
+                stopScanBtn.style.display = 'none';
+                scannerLaser.style.display = 'none';
+                scannerPlaceholder.style.display = 'block';
+            }).catch((err) => {
+                console.error("Failed to stop scanning.", err);
+            });
+        }
+    }
+
+    if(startScanBtn) {
+        startScanBtn.addEventListener('click', startScanning);
+    }
+    if(stopScanBtn) {
+        stopScanBtn.addEventListener('click', stopScanning);
+    }
+});
+</script>
 @endsection

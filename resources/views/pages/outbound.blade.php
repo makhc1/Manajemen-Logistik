@@ -7,16 +7,15 @@
                     <div style="display: flex; flex-direction: column; gap: 1.5rem;">
                         <!-- Create Shipment -->
                         <div class="card">
-                            <h3 style="font-size: 1.1rem; font-weight: 800; color: #0F172A; margin-bottom: 1rem;">Outbound / Create Shipment</h3>
+                            <div style="margin-bottom: 1rem;">
+                                <h3 style="font-size: 1.1rem; font-weight: 800; color: #0F172A; margin-bottom: 0.25rem;">Outbound / Create Shipment</h3>
+                                <p style="font-size: 0.85rem; color: #64748B;">Pilih barang dari Picking List untuk membuat Surat Jalan. Pastikan data penerima sudah benar.</p>
+                            </div>
 
                             <div class="form-grid-2">
                                 <div>
                                     <label class="form-label">Customer / Receiver</label>
-                                    <select class="form-select" id="shipmentCustomer" onchange="updateSuratJalanInfo()">
-                                        <option value="PT Berdikari Jaya">PT Berdikari Jaya</option>
-                                        <option value="Gudang Cabang Surabaya">Gudang Cabang Surabaya</option>
-                                        <option value="CV Maju Logistics">CV Maju Logistics</option>
-                                    </select>
+                                    <input type="text" class="form-input" id="shipmentCustomer" value="PT Berdikari Jaya" oninput="updateSuratJalanInfo()">
                                 </div>
                                 <div>
                                     <label class="form-label">Shipment Date</label>
@@ -37,38 +36,8 @@
                                 <span style="font-size: 0.8rem; color: var(--primary-orange);" id="pickingSelectedCount">4 Selected Items</span>
                             </h3>
 
-                            <div style="display: flex; flex-direction: column; gap: 0.75rem; margin-bottom: 1.25rem;">
-                                <label style="display: flex; align-items: center; justify-content: space-between; padding: 0.65rem 0.85rem; background: #F8FAFC; border-radius: 8px; border: 1px solid #E2E8F0; cursor: pointer;">
-                                    <div style="display: flex; align-items: center; gap: 0.65rem;">
-                                        <input type="checkbox" checked class="pick-item" onchange="syncPickingListToSuratJalan()" data-name="List Inmet" data-qty="5" data-date="25/09/2026">
-                                        <span style="font-size: 0.85rem; font-weight: 700;">List Inmet</span>
-                                    </div>
-                                    <span style="font-size: 0.8rem; font-weight: 800; color: var(--primary-orange);">5 units</span>
-                                </label>
-
-                                <label style="display: flex; align-items: center; justify-content: space-between; padding: 0.65rem 0.85rem; background: #F8FAFC; border-radius: 8px; border: 1px solid #E2E8F0; cursor: pointer;">
-                                    <div style="display: flex; align-items: center; gap: 0.65rem;">
-                                        <input type="checkbox" checked class="pick-item" onchange="syncPickingListToSuratJalan()" data-name="Laptop Dell" data-qty="5" data-date="25/09/2026">
-                                        <span style="font-size: 0.85rem; font-weight: 700;">Laptop Dell</span>
-                                    </div>
-                                    <span style="font-size: 0.8rem; font-weight: 800; color: var(--primary-orange);">x5</span>
-                                </label>
-
-                                <label style="display: flex; align-items: center; justify-content: space-between; padding: 0.65rem 0.85rem; background: #F8FAFC; border-radius: 8px; border: 1px solid #E2E8F0; cursor: pointer;">
-                                    <div style="display: flex; align-items: center; gap: 0.65rem;">
-                                        <input type="checkbox" checked class="pick-item" onchange="syncPickingListToSuratJalan()" data-name="Mouse Logitech" data-qty="10" data-date="25/09/2026">
-                                        <span style="font-size: 0.85rem; font-weight: 700;">Mouse Logitech</span>
-                                    </div>
-                                    <span style="font-size: 0.8rem; font-weight: 800; color: var(--primary-orange);">x10</span>
-                                </label>
-
-                                <label style="display: flex; align-items: center; justify-content: space-between; padding: 0.65rem 0.85rem; background: #F8FAFC; border-radius: 8px; border: 1px solid #E2E8F0; cursor: pointer;">
-                                    <div style="display: flex; align-items: center; gap: 0.65rem;">
-                                        <input type="checkbox" checked class="pick-item" onchange="syncPickingListToSuratJalan()" data-name="Link Cable HighSpeed" data-qty="10" data-date="25/09/2026">
-                                        <span style="font-size: 0.85rem; font-weight: 700;">Link Cable HighSpeed</span>
-                                    </div>
-                                    <span style="font-size: 0.8rem; font-weight: 800; color: var(--primary-orange);">x10</span>
-                                </label>
+                            <div id="pickingListContainer" style="display: flex; flex-direction: column; gap: 0.75rem; margin-bottom: 1.25rem; max-height: 300px; overflow-y: auto;">
+                                <div style="text-align: center; color: #94A3B8; padding: 1rem; font-size: 0.85rem;">Memuat daftar produk...</div>
                             </div>
 
                             <button class="btn-action btn-pdf" style="width: 100%; padding: 0.85rem; font-size: 0.9rem;" onclick="processOutboundStockUpdate()">

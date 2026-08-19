@@ -3,12 +3,12 @@
 @section('content')
 <div id="master-view" class="page-view active">
                 <div class="card" style="margin-bottom: 1.5rem;">
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
+                    <div class="page-header-row">
                         <div>
                             <h2 style="font-size: 1.25rem; font-weight: 800; color: #0F172A;">Inventory / Master</h2>
-                            <p style="font-size: 0.85rem; color: #64748B;">Kelola daftar katalog produk, etalase, dan stok gudang.</p>
+                            <p style="font-size: 0.85rem; color: #64748B;">Kelola daftar produk dan informasi dasar barang sebelum melakukan transaksi Inbound/Outbound.</p>
                         </div>
-                        <div style="display: flex; gap: 0.75rem;">
+                        <div class="page-actions">
                             <input type="text" id="masterSearch" placeholder="Search product..." class="form-input" style="width: 220px;" oninput="filterMasterTable(this.value)">
                             <button onclick="openAddProductModal()" class="btn-action" style="background: #3B82F6; color: white; border: none; padding: 0.55rem 1rem; border-radius: 8px; cursor: pointer; font-weight: 600;"><i class="fa-solid fa-plus"></i> Add Product</button>
                             <a href="/api/products/export" class="btn-action" style="background: #10B981; color: white; text-decoration: none; display: inline-flex; width: 140px; padding: 0.55rem; border-radius: 8px; justify-content: center; align-items: center;"><i class="fa-solid fa-file-excel"></i> Export CSV</a>

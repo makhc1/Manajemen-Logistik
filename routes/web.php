@@ -22,7 +22,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/inbound', [PageController::class, 'inbound']);
     Route::get('/outbound', [PageController::class, 'outbound']);
     Route::get('/warehouses', [PageController::class, 'warehouses']);
-    Route::get('/security', [PageController::class, 'security']);
-    Route::get('/settings', [PageController::class, 'settings']);
     Route::get('/users', [PageController::class, 'users']);
+    Route::get('/design-system', function () {
+        return file_get_contents(public_path('design-system/index.html'));
+    });
 });
