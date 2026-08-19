@@ -991,3 +991,53 @@
 .picking-stock-info { font-size: 0.7rem; color: #64748B; }
 .qty-label { font-size: 0.75rem; color: #64748B; font-weight: 600; }
 .pick-qty-input { width: 70px; padding: 0.35rem; border-radius: 6px; text-align: center; height: auto; }
+
+.sidebar-footer {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1rem;
+    border-top: 1px solid var(--border-color);
+    margin-top: auto;
+    background: #F8FAFC;
+    border-radius: 8px;
+    margin: 1rem;
+}
+
+.sidebar-footer-logo {
+    width: 40px;
+    height: auto;
+    object-fit: contain;
+    flex-shrink: 0;
+}
+
+.sidebar-footer-text-container {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.footer-supported-by {
+    font-size: 0.65rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 0.15rem;
+}
+
+.footer-school-name {
+    font-size: 0.8rem;
+    font-weight: 800;
+    color: var(--text-dark);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.footer-school-location {
+    font-size: 0.7rem;
+    color: var(--primary-orange);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
